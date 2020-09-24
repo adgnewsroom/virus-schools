@@ -98,27 +98,76 @@
 
 </div>
 
-  <!-- <form id="form" class="btn-group btn-group-toggle" data-toggle="buttons">
-    <label class="btn btn-secondary active">
-      <input type="checkbox" name="myCheckBox" value="banana" checked onclick="changeData()">K-12 school districts<br>
-    </label>
-    <label class="btn btn-secondary active">
-      <input type="checkbox" name="myCheckBox" value="orange" checked onclick="changeData2()">Colleges<br>
-    </label>
-  </form> -->
-
-
   <div class="d-flex justify-content-center">
 
   <div class="svg-container3" id="arkansas"></div>
 
 </div>
 
+<div class="spacer" style="padding:40vh"></div>
+
+<div class="container text-center my-4">
+
+    <!-- Table  -->
+<div class="moretest">
+    <table id="testTable" class="table table-sm table-bordered table-striped" cellspacing="0" width="100%" style="z-index:1">
+
+      <thead><tr><th title="Field #1">School district</th>
+    <th title="Field #2">Cumulative cases</th>
+    <th title="Field #3">Active cases</th>
+    <th title="Field #4">Cases among students</th>
+    <th title="Field #5">Cases among faculty</th>
+
+    </tr></thead>
+      <!-- Table head -->
+
+      <!-- Table body -->
+      <tbody id="k12table">
+
+
+      </tbody>
+      <!-- Table body -->
+    </table>
+  </div>
+    <!-- Table  -->
+
+
+    <div class="moretest2">
+
+    <table id="testTable2" class="table table-sm table-bordered table-striped" cellspacing="0" width="100%" style="z-index:1">
+
+      <thead><tr><th title="Field #1">College</th>
+    <th title="Field #2">Cumulative cases</th>
+    <th title="Field #3">Active cases</th>
+    <th title="Field #4">Enrollment</th>
+
+    </tr></thead>
+      <!-- Table head -->
+
+      <!-- Table body -->
+      <tbody id="collegetable">
+
+
+      </tbody>
+      <!-- Table body -->
+    </table>
+    <!-- Table  -->
+  </div>
+
+  </div>
+
+
+
+
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/gh/adgnewsroom/virus-tracker/d3.v3.min.js"></script>
   <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/adgnewsroom/virus-tracker/datatables.min.js"></script>
+
+  <!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
   <script src="//d3js.org/queue.v1.min.js"></script>
   <script type="text/javascript">
 
@@ -681,6 +730,11 @@ var makeVis = function(data) {
 });
 
 
+$('.moretest').show();
+
+$('.moretest2').hide();
+
+
 
 function changeData() {
 
@@ -689,6 +743,12 @@ function changeData() {
   $(".d3-tip").show();
 
   $(".legend6").show();
+
+  $('.moretest2').hide();
+
+  $('.moretest').show();
+
+
 
   svg.selectAll('path.schools')
       .attr('fill', function(d,i) {
@@ -705,6 +765,14 @@ function changeData2() {
 
   $(".legend6").hide();
 
+  $(".moretest2").show();
+
+  $(".moretest").hide();
+
+
+
+
+
 
   // $('.schools').css({ fill: "#d3d3d3" });
 
@@ -714,5 +782,64 @@ function changeData2() {
 }
 
   </script>
+
+
+  <script>
+
+$(document).ready(function () {
+  $.getJSON("https://spreadsheets.google.com/feeds/list/1Hn1ribMz3uANKBE6Qxs9pUG8w2fCnWLqCyPTiiszv2E/2/public/values?alt=json", function (data) {
+
+  var sheetData = data.feed.entry;
+
+  var i;
+  for (i = 0; i < sheetData.length; i++) {
+
+    var districts = data.feed.entry[i]['gsx$_cn6ca']['$t'];
+    var cumu = data.feed.entry[i]['gsx$_cokwr']['$t'];
+    var active = data.feed.entry[i]['gsx$_cpzh4']['$t'];
+    var student = data.feed.entry[i]['gsx$_cre1l']['$t'];
+    var staff = data.feed.entry[i]['gsx$_chk2m']['$t'];
+
+    document.getElementById('k12table').innerHTML += ('<tr>'+'<td>'+districts+'</td>'+'<td>'+cumu+'</td>'+'<td>'+active+'</td>'+'<td>'+student+'</td>'+'<td>'+staff+'</td>'+'</tr>');
+  }
+
+$('#testTable').DataTable({
+    "pageLength": 10
+});
+$('.dataTables_length').addClass('bs-select');
+});
+});
+
+
+
+
+$(document).ready(function () {
+  $.getJSON("https://spreadsheets.google.com/feeds/list/1sZOvxOT6mUtBP-mJsybsyKRLAO4C2Js84obYcrQFpdk/2/public/values?alt=json", function (data) {
+
+  var sheetData = data.feed.entry;
+
+  var i;
+  for (i = 0; i < sheetData.length; i++) {
+
+    var collegename = data.feed.entry[i]['gsx$_cn6ca']['$t'];
+    var collegecumu = data.feed.entry[i]['gsx$_cokwr']['$t'];
+    var collegeactive = data.feed.entry[i]['gsx$_cpzh4']['$t'];
+    var collegeenroll = data.feed.entry[i]['gsx$_cre1l']['$t'];
+
+
+    document.getElementById('collegetable').innerHTML += ('<tr>'+'<td>'+collegename+'</td>'+'<td>'+collegecumu+'</td>'+'<td>'+collegeactive+'</td>'+'<td>'+collegeenroll+'</td>'+'</tr>');
+
+  }
+
+
+
+$('#testTable2').DataTable({
+    "pageLength": 10
+});
+$('.dataTables_length').addClass('bs-select');
+});
+});
+  </script>
+
 </body>
 </html>
