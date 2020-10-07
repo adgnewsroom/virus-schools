@@ -25,6 +25,11 @@
     fill: #000;
   }
 
+  #buttons {
+z-index: 100
+
+  }
+
   .schools:hover{
     opacity: .6;
   }
@@ -87,7 +92,7 @@
 
   <div class="d-flex justify-content-center">
 
-  <div class="btn-group btn-group-toggle" data-toggle="buttons" style="padding-bottom: 10px; padding-top: 20px">
+  <div id="buttons" class="btn-group btn-group-toggle" data-toggle="buttons" style="padding-bottom: 10px; padding-top: 20px">
     <label class="btn btn-secondary active">
       <input type="radio" name="options" id="option1" autocomplete="off" checked onclick="changeData()"> K-12 school districts
     </label>
